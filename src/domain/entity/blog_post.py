@@ -26,8 +26,7 @@ class BlogPost:
             raise ValueError("Title is required")
         if not self.__content:
             raise ValueError("Content is required")
-        if not self.__author_id:
-            raise ValueError("Author is required")
+    
         
     @property
     def id(self)-> uuid.UUID:

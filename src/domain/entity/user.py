@@ -3,7 +3,7 @@ from typing import List, Optional
 import uuid
 import re
 
-from domain.entity.blog_post import BlogPost
+from src.domain.entity.blog_post import BlogPost
 
 
 class User:
