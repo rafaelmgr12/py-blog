@@ -43,12 +43,13 @@ class User:
     def _validate(self) -> None:
         if not self.__name:
             raise ValueError("Name is required")
-        if not self.__email and self.validate_email(self.__email):
-            raise ValueError("Email is required")
+        if not self.__email and not self._validate_email(self.__email):
+            raise ValueError("Email invalid")
         if not self.__password:
             raise ValueError("Password is required")
 
-    def _validate_email(self, email) -> None:
+    def _validate_email(self, email) -> bool:
         pattern = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
         if not re.match(pattern, email):
-            raise ValueError("Invalid email")
+            return False
+        return True
