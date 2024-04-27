@@ -2,7 +2,7 @@ import datetime
 from typing import List, Optional
 import uuid
 import re
-
+import bcrypt
 from src.domain.entity.blog_post import BlogPost
 
 
@@ -53,3 +53,8 @@ class User:
         if not re.match(pattern, email):
             return False
         return True
+
+    
+    def hash_password(self)-> None:
+        self.__password = bcrypt.hashpw(self.__password.encode(), bcrypt.gensalt()).decode()
+        
