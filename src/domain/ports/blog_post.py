@@ -14,7 +14,7 @@ class BlogPostPort(ABC):
         pass
     
     @abstractmethod
-    def find_all(self) -> List[BlogPost]:
+    def find_all_by_user_id(self) -> List[BlogPost]:
         pass
     
     @abstractmethod
