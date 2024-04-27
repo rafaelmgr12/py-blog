@@ -12,7 +12,7 @@ class BlogPost:
     __updated_at: datetime
     
     
-    def __init__(self, title: str, content: str, user_id: uuid.UUID)->str:
+    def __init__(self, title: str, content: str, author_id: uuid.UUID)->str:
         self.__id = uuid.uuid4()
         self.__title = title
         self.__content = content
