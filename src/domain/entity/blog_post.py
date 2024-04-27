@@ -12,10 +12,11 @@ class BlogPost:
     __updated_at: datetime
     
     
-    def __init__(self, title: str, content: str)->str:
+    def __init__(self, title: str, content: str, user_id: uuid.UUID)->str:
         self.__id = uuid.uuid4()
         self.__title = title
         self.__content = content
+        self.__author_id = author_id
         self.__created_at = datetime.datetime.now()
         self.__updated_at = datetime.datetime.now()
         
@@ -37,6 +38,11 @@ class BlogPost:
         return self.__title
     
     @property
+    def author_id(self)-> uuid.UUID:
+        return self.__author_id
+    
+    @property
     def content(self)-> str:
         return self.__content
+    
     
