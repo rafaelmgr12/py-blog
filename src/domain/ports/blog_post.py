@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from src.domain.entity.blog_post import BlogPost
 from typing import List
+import uuid
 
 
 class BlogPostPort(ABC):
@@ -14,7 +15,7 @@ class BlogPostPort(ABC):
         pass
     
     @abstractmethod
-    def find_all_by_user_id(self) -> List[BlogPost]:
+    def find_all_by_user_id(self, user_id: uuid.UUID) -> List[BlogPost]:
         pass
     
     @abstractmethod
