@@ -1,5 +1,6 @@
 import os
-
+import asyncio
+import uvicorn
 from dotenv import load_dotenv
 
 from src.app.usecase.user_usecase import UserUsecase
@@ -7,18 +8,14 @@ from src.infra.db.db import DBConnect
 from src.infra.repository.user_repo import SQLUserRepository
 from src.infra.web.handler.user_handler import UserHandler
 from src.infra.web.webserver.webserver import WebServer
-import asyncio
 
 load_dotenv()
 
-
-
-
-async def main(conn_str: str, port: int, host: str)-> None:
+async def create_app(conn_str, port, host):
     # Initialize the database connection
-    db_connect = DBConnect(connection_string=conn_str)  # Make sure to provide the actual connection string
+    db_connect = DBConnect(connection_string=conn_str)
 
-    # Create session for the user repository
+    # Async context manager for the session
     async with db_connect.get_session() as session:
         user_repo = SQLUserRepository(session)
         user_usecase = UserUsecase(user_repo)
@@ -26,22 +23,21 @@ async def main(conn_str: str, port: int, host: str)-> None:
 
         server = WebServer(port=port, host=host)
 
-        # Add your existing routes
-        def example_route():
-            return {"message": "Wlecome to the server!"}
-        server.add_route("/", example_route, ["GET"])
+        # Add routes
+        server.add_route("/", lambda: {"message": "Welcome to the server!"}, ["GET"])
+        server.add_route("/user", user_handler.create_user, ["POST"])
 
-        # Add the create_user route
-        server.add_route("/create_user", user_handler.create_user, ["POST"])
+        return server.app
 
-        # Run the server
-        server.run()
+def main():
+    conn_str = os.getenv("POSTGRES_URL")
+    port = int(os.getenv("PORT", 8000))
+    host = os.getenv("HOST", "localhost")
+
+    app = asyncio.run(create_app(conn_str, port, host))
+
+    # Directly run Uvicorn with the FastAPI app
+    uvicorn.run(app, host=host, port=port)
+
 if __name__ == "__main__":
-    conn = os.getenv("POSTGRES_URL")
-    port = os.getenv("PORT")
-    host = os.getenv("HOST")
-
-    async def main_wrapper():
-        await main(conn, port, host)
-
-    asyncio.run(main_wrapper())
+    main()
