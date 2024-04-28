@@ -11,7 +11,7 @@ from src.infra.web.utils.json_formatter import JsonFormatter
 # Setup logging with JSON output
 logger = logging.getLogger("webserver_logger")
 logger.setLevel(logging.INFO)
-handler = logging.FileHandler('logs.json', mode='a')
+handler = logging.FileHandler('./logs/logs.json', mode='a')
 handler.setFormatter(JsonFormatter())
 logger.addHandler(handler)
 
