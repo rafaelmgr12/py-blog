@@ -1,7 +1,7 @@
 import json
 import logging
 import uvicorn
-from typing import Callable, List
+from typing import Callable, List,Dict
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -14,9 +14,6 @@ logger.setLevel(logging.INFO)
 handler = logging.FileHandler('logs.json', mode='a')
 handler.setFormatter(JsonFormatter())
 logger.addHandler(handler)
-
-
-
 
 
 class WebServer:
@@ -43,7 +40,7 @@ class WebServer:
         async def root():
             return {"message": "Welcome to FastAPI"}
 
-    def add_route(self, path: str, endpoint: Callable, methods: List[str]):
+    def add_route(self, path: str, endpoint: Callable, methods: List[str], responses_model: Dict = None):
         for method in methods:
             if method.upper() == "GET":
                 self.app.get(path)(endpoint)
