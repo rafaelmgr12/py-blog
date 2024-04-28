@@ -7,8 +7,7 @@ class UserRequestCreate(BaseModel):
     email: EmailStr
     password: str
     
-    class Config:
-        orm_mode = True
+    
         
         
 class UserResponse(BaseModel):
@@ -20,5 +19,3 @@ class UserResponse(BaseModel):
         __updated_at: str
         
         
-        class Config:
-            orm_mode = True
