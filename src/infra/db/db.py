@@ -1,6 +1,10 @@
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 from contextlib import asynccontextmanager
+from sqlalchemy.orm import declarative_base
+
+
+Base = declarative_base()
 
 
 class DBConnect:
