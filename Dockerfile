@@ -28,6 +28,7 @@ RUN adduser \
     --uid "${UID}" \
     appuser
 
+RUN mkdir /app/logs && chown -R appuser:appuser /app/logs
 
 # Download dependencies as a separate step to take advantage of Docker's caching.
 # Leverage a cache mount to /root/.cache/pip to speed up subsequent builds.
@@ -43,9 +44,6 @@ RUN apt-get update && apt-get -y install libpq-dev gcc \
     && apt-get autoremove -y && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-    # Switch to the non-privileged user to run the application.
-USER appuser
-
 # Copy the source code into the container.
 COPY . .
 
@@ -53,4 +51,4 @@ COPY . .
 EXPOSE 8000
 
 # Run the application.
-CMD python main.py
+CMD ["python", "main.py"]
