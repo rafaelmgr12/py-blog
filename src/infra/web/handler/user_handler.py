@@ -11,7 +11,7 @@ class UserHandler:
         
         
         
-    def create_user(self, payload: UserRequestCreate) -> UserResponse:
+    async def create_user(self, payload: UserRequestCreate) -> UserResponse:
         try:
             user = self.user_usecase.create_user(payload.name, payload.email, payload.password)
             return UserResponse(**user.dict())
