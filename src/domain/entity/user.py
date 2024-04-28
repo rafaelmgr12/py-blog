@@ -16,8 +16,11 @@ class User:
     __updated_at: datetime
     __blog_posts: List[BlogPost]
 
-    def __init__(self, name: str, email: str, password: str, blog_post: Optional[List[BlogPost]]=[]) -> None:
-        self.__id = uuid.uuid4()
+    def __init__(self, name: str, email: str, password: str, id: Optional[uuid.UUID] = None,blog_post: Optional[List[BlogPost]]=[], ) -> None:
+        if id:
+            self.__id = id
+        else:
+            self.__id = uuid.uuid4()
         self.__name = name
         self.__email = email
         self.__password = password
