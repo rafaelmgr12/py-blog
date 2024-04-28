@@ -4,7 +4,7 @@ from sqlalchemy.orm import declarative_base
 import datetime
 
 from src.domain.entity.user import User
-Base = declarative_base()
+from src.infra.db.db import Base
 
 class UserModel(Base):
     __tablename__ = 'users'

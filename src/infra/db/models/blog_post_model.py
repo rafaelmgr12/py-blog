@@ -3,8 +3,9 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import declarative_base, relationship
 import datetime
 from src.domain.entity.blog_post import BlogPost
+from src.infra.db.models.user_model import Base
 
-Base = declarative_base()
+
 
 class BlogPostModel(Base):
     __tablename__ = 'blog_posts'
