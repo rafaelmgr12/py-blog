@@ -13,13 +13,15 @@ class UserHandler:
         
     async def create_user(self, payload: UserRequestCreate) -> UserResponse:
         try:
-            user = self.user_usecase.create_user(payload.name, payload.email, payload.password)
-            return UserResponse(**user.dict())
-        except (ValueError, Exception) as e:
-            if e == ValueError("Email already exists"):
-                raise HTTPException(status_code=404, detail="Email already exists")
+            user = await self.user_usecase.create_user(payload.name, payload.email, payload.password)
+            return UserResponse(id=str(user.id), name=user.name, email=user.email)
+        except ValueError as e:
+            if str(e) == "Email already exists":
+                raise HTTPException(status_code=400, detail="Email already exists")
             else:
-                raise HTTPException(status_code=500, detail="Internal server error")
+                raise HTTPException(status_code=400, detail=str(e))
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
             
     
             
