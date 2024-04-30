@@ -49,10 +49,13 @@ class SQLBlogPostRepository(BlogPostPort):
     async def update(self, blog_post: BlogPost) -> BlogPost:
         try:
             await self.session.execute(
-                update(BlogPostModel).
-                where(BlogPostModel.id == blog_post.id).
-                values(title=blog_post.title, content=blog_post.content,
-                       updated_at=datetime.datetime.now())
+                update(BlogPostModel)
+                .where(BlogPostModel.id == blog_post.id)
+                .values(
+                    title=blog_post.title,
+                    content=blog_post.content,
+                    updated_at=datetime.datetime.now(),
+                )
             )
             await self.session.commit()
             return blog_post

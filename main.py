@@ -11,10 +11,8 @@ from src.infra.web.webserver.webserver import WebServer
 
 load_dotenv()
 
-create_user_response_dict = {
-   
-    400: "Email already exists"
-}
+create_user_response_dict = {400: "Email already exists"}
+
 
 async def create_app(conn_str, port, host):
     # Initialize the database connection
@@ -29,10 +27,24 @@ async def create_app(conn_str, port, host):
         server = WebServer(port=port, host=host)
 
         # Add routes
-        server.add_route("/", lambda: {"message": "Welcome to the server! Access /docs to see the documentation"}, ["GET"])
-        server.add_route("/user", user_handler.create_user, ["POST"], create_user_response_dict, ["User"], 201)
+        server.add_route(
+            "/",
+            lambda: {
+                "message": "Welcome to the server! Access /docs to see the documentation"
+            },
+            ["GET"],
+        )
+        server.add_route(
+            "/user",
+            user_handler.create_user,
+            ["POST"],
+            create_user_response_dict,
+            ["User"],
+            201,
+        )
 
         return server.app
+
 
 def main():
     conn_str = os.getenv("POSTGRES_URL")
@@ -43,6 +55,7 @@ def main():
 
     # Directly run Uvicorn with the FastAPI app
     uvicorn.run(app, host=host, port=port)
+
 
 if __name__ == "__main__":
     main()

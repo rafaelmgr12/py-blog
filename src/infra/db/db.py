@@ -12,7 +12,7 @@ class DBConnect:
         self.engine = create_async_engine(
             connection_string,
             echo=True,  # Show SQL queries
-            future=True  # Use the newest SQLAlchemy version
+            future=True,  # Use the newest SQLAlchemy version
         )
         self.async_session = sessionmaker(
             self.engine, class_=AsyncSession, expire_on_commit=False

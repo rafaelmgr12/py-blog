@@ -3,7 +3,6 @@ import json
 from datetime import datetime
 
 
-
 class JsonFormatter(logging.Formatter):
     def format(self, record):
         log_record = {
@@ -13,8 +12,8 @@ class JsonFormatter(logging.Formatter):
             "module": record.module,
             "filename": record.filename,
             "lineno": record.lineno,
-            "funcName": record.funcName
+            "funcName": record.funcName,
         }
         if record.exc_info:
-            log_record['exception'] = self.formatException(record.exc_info)
+            log_record["exception"] = self.formatException(record.exc_info)
         return json.dumps(log_record)

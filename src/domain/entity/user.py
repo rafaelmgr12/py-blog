@@ -7,7 +7,6 @@ from src.domain.entity.blog_post import BlogPost
 
 
 class User:
-
     __id: uuid.UUID
     __name: str
     __email: str
@@ -16,7 +15,14 @@ class User:
     __updated_at: datetime
     __blog_posts: List[BlogPost]
 
-    def __init__(self, name: str, email: str, password: str, id: Optional[uuid.UUID] = None, blog_post: Optional[List[BlogPost]] = [], ) -> None:
+    def __init__(
+        self,
+        name: str,
+        email: str,
+        password: str,
+        id: Optional[uuid.UUID] = None,
+        blog_post: Optional[List[BlogPost]] = [],
+    ) -> None:
         if id:
             self.__id = id
         else:
@@ -74,4 +80,5 @@ class User:
 
     def hash_password(self) -> None:
         self.__password = bcrypt.hashpw(
-            self.__password.encode(), bcrypt.gensalt()).decode()
+            self.__password.encode(), bcrypt.gensalt()
+        ).decode()

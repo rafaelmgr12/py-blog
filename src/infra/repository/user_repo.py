@@ -12,6 +12,7 @@ from src.infra.db.models.user_model import UserModel
 
 import uuid
 
+
 class SQLUserRepository(UserPort):
     def __init__(self, session: AsyncSession) -> None:
         self.session = session
@@ -49,10 +50,14 @@ class SQLUserRepository(UserPort):
     async def update(self, user: User) -> User:
         try:
             await self.session.execute(
-                update(UserModel).
-                where(UserModel.id == user.id).
-                values(name=user.name, email=user.email, password=user.hashed_password,
-                       updated_at=datetime.datetime.now())
+                update(UserModel)
+                .where(UserModel.id == user.id)
+                .values(
+                    name=user.name,
+                    email=user.email,
+                    password=user.hashed_password,
+                    updated_at=datetime.datetime.now(),
+                )
             )
             await self.session.commit()
             return user
@@ -62,9 +67,7 @@ class SQLUserRepository(UserPort):
 
     async def delete(self, id: uuid.UUID) -> None:
         try:
-            await self.session.execute(
-                delete(UserModel).where(UserModel.id == id)
-            )
+            await self.session.execute(delete(UserModel).where(UserModel.id == id))
             await self.session.commit()
         except SQLAlchemyError as e:
             await self.session.rollback()

@@ -13,6 +13,7 @@ from alembic import context
 
 from dotenv import load_dotenv
 import os
+
 load_dotenv()
 
 user = os.getenv("POSTGRES_USER")
@@ -29,7 +30,8 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 config.set_main_option(
-    "sqlalchemy.url",f"postgresql+asyncpg://{user}:{password}@{host}:{port}/{db_name}")
+    "sqlalchemy.url", f"postgresql+asyncpg://{user}:{password}@{host}:{port}/{db_name}"
+)
 # add your model's MetaData object here
 # for 'autogenerate' support
 # from myapp import mymodel

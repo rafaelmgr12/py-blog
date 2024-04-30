@@ -4,7 +4,6 @@ from src.domain.ports.user import UserPort
 
 
 class UserUsecase:
-
     def __init__(self, user_repository: UserPort):
         self.user_repository = user_repository
 
@@ -27,15 +26,16 @@ class UserUsecase:
             return await self.user_repository.find_by_email(email)
         except Exception as e:
             raise e
-        
+
     async def get_user_by_id(self, user_id: int) -> User | None:
         try:
             return await self.user_repository.find_by_id(user_id)
         except Exception as e:
             raise e
-        
-        
-    async def update_user(self, user_id: int, name: str, email: str, password: str) -> User:
+
+    async def update_user(
+        self, user_id: int, name: str, email: str, password: str
+    ) -> User:
         user = User(name, email, password)
         user.hash_password()
 
@@ -45,7 +45,7 @@ class UserUsecase:
             raise e
 
         return user
-    
+
     async def delete_user(self, user_id: int) -> None:
         try:
             await self.user_repository.delete(user_id)

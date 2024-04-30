@@ -11,17 +11,19 @@ from src.infra.web.utils.json_formatter import JsonFormatter
 logger = logging.getLogger("webserver_logger")
 logger.setLevel(logging.INFO)
 
-file_handler = logging.FileHandler('./logs/logs.json', mode='a')
+file_handler = logging.FileHandler("./logs/logs.json", mode="a")
 file_handler.setFormatter(JsonFormatter())
 logger.addHandler(file_handler)
 
 stream_handler = logging.StreamHandler()
-stream_handler.setFormatter(JsonFormatter())  # Pode optar por um formato diferente aqui se preferir
+stream_handler.setFormatter(
+    JsonFormatter()
+)  # Pode optar por um formato diferente aqui se preferir
 logger.addHandler(stream_handler)
 
 
 class WebServer:
-    def __init__(self, port: int, host: str = 'localhost'):
+    def __init__(self, port: int, host: str = "localhost"):
         self.app = FastAPI()
         self.port = port
         self.host = host
@@ -33,8 +35,7 @@ class WebServer:
             CORSMiddleware,
             allow_origins=["https://*", "http://*"],
             allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-            allow_headers=["Accept", "Authorization",
-                           "Content-Type", "X-CSRF-Token"],
+            allow_headers=["Accept", "Authorization", "Content-Type", "X-CSRF-Token"],
             expose_headers=["Link"],
         )
         self.app.add_middleware(LoggingMiddleware)
@@ -49,32 +50,41 @@ class WebServer:
         for code, message in response_dict.items():
             responses[code] = {
                 "description": message,
-                "content": {
-                    "application/json": {
-                        "example": {"detail": message}
-                    }
-                }
+                "content": {"application/json": {"example": {"detail": message}}},
             }
         return responses
 
-    def add_route(self, path: str, endpoint: Callable, methods: List[str], response_dict: Dict[int, str]={}, tags: List[str] = [], status_code: status = status.HTTP_200_OK):
+    def add_route(
+        self,
+        path: str,
+        endpoint: Callable,
+        methods: List[str],
+        response_dict: Dict[int, str] = {},
+        tags: List[str] = [],
+        status_code: status = status.HTTP_200_OK,
+    ):
         responses = self.create_response(response_dict)
         for method in methods:
             if method.upper() == "GET":
-                self.app.get(path, responses=responses, tags=tags,
-                             status_code=status_code)(endpoint)
+                self.app.get(
+                    path, responses=responses, tags=tags, status_code=status_code
+                )(endpoint)
             elif method.upper() == "POST":
-                self.app.post(path, responses=responses, tags=tags,status_code=status_code)(endpoint)
+                self.app.post(
+                    path, responses=responses, tags=tags, status_code=status_code
+                )(endpoint)
             elif method.upper() == "PUT":
-                self.app.put(path, responses=responses, tags=tags,
-                             status_code=status_code)(endpoint)
+                self.app.put(
+                    path, responses=responses, tags=tags, status_code=status_code
+                )(endpoint)
             elif method.upper() == "PATCH":
-                self.app.patch(path, responses=responses,
-                               tags=tags, status_code=status_code)(endpoint)
+                self.app.patch(
+                    path, responses=responses, tags=tags, status_code=status_code
+                )(endpoint)
             elif method.upper() == "DELETE":
-                self.app.delete(path, responses=responses,
-                                tags=tags, status_code=status_code)(endpoint)
+                self.app.delete(
+                    path, responses=responses, tags=tags, status_code=status_code
+                )(endpoint)
 
     def run(self, self_reload: bool = False) -> None:
-        uvicorn.run(self.app, host=self.host,
-                    port=self.port, reload=self_reload)
+        uvicorn.run(self.app, host=self.host, port=self.port, reload=self_reload)

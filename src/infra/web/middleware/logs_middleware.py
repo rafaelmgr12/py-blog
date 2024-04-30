@@ -4,17 +4,22 @@ from starlette.responses import Response
 from datetime import datetime
 import logging
 
+
 class LoggingMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next: RequestResponseEndpoint):
         start_time = datetime.now()
         response = await call_next(request)
         process_time = (datetime.now() - start_time).total_seconds()
 
-        body = b''
+        body = b""
         async for chunk in response.body_iterator:
             body += chunk
-        
-        new_response = Response(content=body, status_code=response.status_code, headers=dict(response.headers))
+
+        new_response = Response(
+            content=body,
+            status_code=response.status_code,
+            headers=dict(response.headers),
+        )
 
         logger = logging.getLogger("webserver_logger")
         log_record = {
@@ -23,8 +28,8 @@ class LoggingMiddleware(BaseHTTPMiddleware):
             "remoteAddr": request.client.host,
             "processTime": process_time,
             "status_code": response.status_code,
-            "response": body.decode()  #
+            "response": body.decode(),  #
         }
         logger.info(log_record)
 
-        return new_response  
+        return new_response

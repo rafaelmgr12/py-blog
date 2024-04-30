@@ -2,6 +2,7 @@ import uuid
 from abc import ABC, abstractmethod
 from src.domain.entity.user import User
 
+
 class UserPort(ABC):
     @abstractmethod
     async def create(self, user: User) -> User:
