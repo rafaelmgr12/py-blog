@@ -1,8 +1,8 @@
 import json
 import logging
 import uvicorn
-from typing import Callable, List,Dict
-from fastapi import FastAPI
+from typing import Callable, List, Dict
+from fastapi import FastAPI, status
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.infra.web.middleware.logs_middleware import LoggingMiddleware
@@ -40,18 +40,37 @@ class WebServer:
         async def root():
             return {"message": "Welcome to FastAPI"}
 
-    def add_route(self, path: str, endpoint: Callable, methods: List[str], responses_model: Dict = None):
+    def create_response(self, response_dict: Dict[int, str]) -> Dict:
+        responses = {}
+        for code, message in response_dict.items():
+            responses[code] = {
+                "description": message,
+                "content": {
+                    "application/json": {
+                        "example": {"detail": message}
+                    }
+                }
+            }
+        return responses
+
+    def add_route(self, path: str, endpoint: Callable, methods: List[str], response_dict: Dict[int, str], tags: List[str] = [], status_code: status = status.HTTP_200_OK):
+        responses = self.create_response(response_dict)
         for method in methods:
             if method.upper() == "GET":
-                self.app.get(path)(endpoint)
+                self.app.get(path, responses=responses, tags=tags,
+                             status_code=status_code)(endpoint)
             elif method.upper() == "POST":
-                self.app.post(path)(endpoint)
+                self.app.post(path, responses=responses, tags=tags,status_code=status_code)(endpoint)
             elif method.upper() == "PUT":
-                self.app.put(path)(endpoint)
+                self.app.put(path, responses=responses, tags=tags,
+                             status_code=status_code)(endpoint)
             elif method.upper() == "PATCH":
-                self.app.put(path)(endpoint)
+                self.app.patch(path, responses=responses,
+                               tags=tags, status_code=status_code)(endpoint)
             elif method.upper() == "DELETE":
-                self.app.delete(path)(endpoint)
+                self.app.delete(path, responses=responses,
+                                tags=tags, status_code=status_code)(endpoint)
 
-    def run(self, self_reload:bool=False)->None:
-        uvicorn.run(self.app, host=self.host, port=self.port, reload=self_reload)
+    def run(self, self_reload: bool = False) -> None:
+        uvicorn.run(self.app, host=self.host,
+                    port=self.port, reload=self_reload)
