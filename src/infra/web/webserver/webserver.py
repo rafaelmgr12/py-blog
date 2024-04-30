@@ -1,4 +1,3 @@
-import json
 import logging
 import uvicorn
 from typing import Callable, List, Dict
@@ -11,9 +10,14 @@ from src.infra.web.utils.json_formatter import JsonFormatter
 # Setup logging with JSON output
 logger = logging.getLogger("webserver_logger")
 logger.setLevel(logging.INFO)
-handler = logging.FileHandler('./logs/logs.json', mode='a')
-handler.setFormatter(JsonFormatter())
-logger.addHandler(handler)
+
+file_handler = logging.FileHandler('./logs/logs.json', mode='a')
+file_handler.setFormatter(JsonFormatter())
+logger.addHandler(file_handler)
+
+stream_handler = logging.StreamHandler()
+stream_handler.setFormatter(JsonFormatter())  # Pode optar por um formato diferente aqui se preferir
+logger.addHandler(stream_handler)
 
 
 class WebServer:
