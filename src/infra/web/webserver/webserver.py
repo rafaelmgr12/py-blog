@@ -53,5 +53,5 @@ class WebServer:
             elif method.upper() == "DELETE":
                 self.app.delete(path)(endpoint)
 
-    def run(self):
-        uvicorn.run(self.app, host=self.host, port=self.port)
+    def run(self, self_reload:bool=False)->None:
+        uvicorn.run(self.app, host=self.host, port=self.port, reload=self_reload)
