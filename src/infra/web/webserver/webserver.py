@@ -53,7 +53,7 @@ class WebServer:
             }
         return responses
 
-    def add_route(self, path: str, endpoint: Callable, methods: List[str], response_dict: Dict[int, str], tags: List[str] = [], status_code: status = status.HTTP_200_OK):
+    def add_route(self, path: str, endpoint: Callable, methods: List[str], response_dict: Dict[int, str]={}, tags: List[str] = [], status_code: status = status.HTTP_200_OK):
         responses = self.create_response(response_dict)
         for method in methods:
             if method.upper() == "GET":
