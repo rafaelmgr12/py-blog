@@ -15,9 +15,11 @@ class LoggingMiddleware(BaseHTTPMiddleware):
             "url": request.url.path,
             "remoteAddr": request.client.host,
             "processTime": process_time,
-            "status_code": response.status_code
+            "status_code": response.status_code,
+            "message": response.body.decode("utf-8")
         }
         logger.info(log_record)
+        
 
         return response
     
