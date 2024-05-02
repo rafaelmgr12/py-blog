@@ -36,11 +36,11 @@ def upgrade() -> None:
         sa.Column("id", sa.UUID(), nullable=False),
         sa.Column("title", sa.String(), nullable=False),
         sa.Column("content", sa.String(), nullable=False),
-        sa.Column("author_id", sa.UUID(), nullable=True),
+        sa.Column("user_id", sa.UUID(), nullable=True),
         sa.Column("created_at", sa.DateTime(), nullable=True),
         sa.Column("updated_at", sa.DateTime(), nullable=True),
         sa.ForeignKeyConstraint(
-            ["author_id"],
+            ["user_id"],
             ["users.id"],
         ),
         sa.PrimaryKeyConstraint("id"),

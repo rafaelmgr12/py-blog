@@ -40,7 +40,7 @@ class SQLBlogPostRepository(BlogPostPort):
     async def find_all_by_user_id(self, user_id: uuid.UUID) -> List[BlogPost]:
         try:
             result = await self.session.execute(
-                select(BlogPostModel).where(BlogPostModel.author_id == user_id)
+                select(BlogPostModel).where(BlogPostModel.user_id == user_id)
             )
             return [blog_post.to_domain() for blog_post in result.scalars().all()]
         except (SQLAlchemyError, Exception) as e:
