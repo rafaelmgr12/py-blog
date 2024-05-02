@@ -11,7 +11,7 @@ class BlogPostModel(Base):
     id = Column(UUID(as_uuid=True), primary_key=True)
     title = Column(String, nullable=False)
     content = Column(String, nullable=False)
-    author_id = Column(UUID(as_uuid=True), ForeignKey("users.id"))
+    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"))
     created_at = Column(DateTime, default=datetime.datetime.now)
     updated_at = Column(
         DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now
@@ -23,12 +23,12 @@ class BlogPostModel(Base):
             id=blog_post.id,
             title=blog_post.title,
             content=blog_post.content,
-            author_id=blog_post.author_id,
+            user_id=blog_post.user_id,
             created_at=blog_post.created_at,
             updated_at=blog_post.updated_at,
         )
 
     def to_domain(self) -> BlogPost:
         return BlogPost(
-            id=self.id, title=self.title, content=self.content, author_id=self.author_id
+            id=self.id, title=self.title, content=self.content, user_id=self.user_id
         )
